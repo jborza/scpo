@@ -8,7 +8,7 @@ function makeCards() {
         var value = allowedValues[i];
         var d = $("<div/>");
         d.attr('data-value', value);
-        d.attr('onClick', 'vote(' + value + ');');
+        d.click(card_clicked);
         d.attr('id', "card-" + value);
         d.addClass("card");
         d.text(value);
@@ -18,6 +18,10 @@ function makeCards() {
 
 function hideMyVote() {
     forAllCards(function (f) { f.removeClass("voted"); });
+}
+
+function card_clicked() {
+    vote($(this).attr('data-value'));
 }
 
 function vote(value) {
