@@ -1,0 +1,2 @@
+# scpo
+Scrum Poker Tool
