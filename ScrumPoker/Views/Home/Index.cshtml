@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <h1>Scrum poker tool</h1>
+    @using (Html.BeginForm("Poker", "Home",FormMethod.Get))
+    {
+        <p>
+            Room id: @Html.TextBox("roomId") <input type="submit" value="Enter" />
+        </p>
+    }
+    <br />
+    @Html.ActionLink("Create a new room", "Create")
+</div>
