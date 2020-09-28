@@ -8,7 +8,7 @@ namespace ScrumPoker.Models
     public class Room
     {
         private HashSet<string> participants;
-        private Dictionary<string, int?> votes;
+        private Dictionary<string, decimal?> votes;
         public int ID { get; private set; }
 
         public Room(int id)
@@ -20,7 +20,7 @@ namespace ScrumPoker.Models
 
         public void Reset()
         {
-            votes = new Dictionary<string, int?>();
+            votes = new Dictionary<string, decimal?>();
             foreach (var participant in participants)
             {
                 votes[participant] = null;
@@ -39,17 +39,17 @@ namespace ScrumPoker.Models
             votes.Remove(id);
         }
 
-        public void AcceptVote(string participantId, int vote)
+        public void AcceptVote(string participantId, decimal vote)
         {
             votes[participantId] = vote;
         }
 
-        public int[] AllowedVotes
+        public decimal[] AllowedVotes
         {
-            get { return new int[] { 1, 2, 3, 5, 8, 13, 21, 34, 55 }; }
+            get { return new decimal[] { 0.5m, 1, 2, 3, 5, 8, 13, 21, 34, 55 }; }
         }
 
-        private Dictionary<string, int> ValidVotes()
+        private Dictionary<string, decimal> ValidVotes()
         {
             return votes.Where(p => p.Value != null).ToDictionary(k => k.Key, v => v.Value.Value);
         }
@@ -59,12 +59,18 @@ namespace ScrumPoker.Models
             return votes.All(p => p.Value != null);
         }
 
-        public int GetSummaryVote()
+        private decimal RoundToNearest(decimal value)
         {
-            return (int)Math.Round(ValidVotes().Average(p => p.Value));
+            return Math.Round(value * 10, MidpointRounding.AwayFromZero) / 10;
         }
 
-        public Dictionary<string,int?> GetVotes()
+        public decimal GetSummaryVote()
+        {
+            var average = ValidVotes().Average(p => p.Value);
+            return RoundToNearest(average);
+        }
+
+        public Dictionary<string,decimal?> GetVotes()
         {
             return votes;
         }

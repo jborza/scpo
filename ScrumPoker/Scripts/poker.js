@@ -3,7 +3,7 @@ var hub;
 
 function makeCards() {
     $("#cards").empty();
-    var allowedValues = [1, 2, 3, 5, 8, 13, 21, 34, 55];
+    var allowedValues = [0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55];
     for (var i = 0; i < allowedValues.length; i++) {
         var value = allowedValues[i];
         var d = $("<div/>");
@@ -114,4 +114,7 @@ $(function () {
         initialize();
     });
     $("#resetBtn").click(reset);
+    $("#revealBtn").click(function () {
+        hub.server.forceReveal(roomId());
+    });
 });

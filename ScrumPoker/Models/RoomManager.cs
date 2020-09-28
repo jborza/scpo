@@ -13,11 +13,12 @@ namespace ScrumPoker.Models
             get { return instance ?? (instance = new RoomManager()); }
         }
 
-        private static Random random;
-        private Dictionary<int, Room> rooms;
+        private readonly Random random;
+        private readonly Dictionary<int, Room> rooms;
 
         public RoomManager()
         {
+            random = new Random();
             rooms = new Dictionary<int, Room>();
         }
 

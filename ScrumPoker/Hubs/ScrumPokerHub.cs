@@ -13,7 +13,7 @@ namespace ScrumPoker.Hubs
     {
         void RevealVotes();
         void ShowSummary(object summary);
-        void UpdateStatus(Dictionary<string, int?> getVotes);
+        void UpdateStatus(Dictionary<string, decimal?> getVotes);
         void HideVotes();
         void HideClientVote();
     }
@@ -26,12 +26,19 @@ namespace ScrumPoker.Hubs
             return RoomManager.Instance.GetRoom(roomId);
         }
 
-        public void CastVote(int roomId, string sender, int vote)
+        public void CastVote(int roomId, string sender, decimal vote)
         {
             GetModel(roomId).AcceptVote(sender, vote);
             BroadcastStatus(roomId);
             if (!GetModel(roomId).AllParticipantsHaveVoted())
                 return;
+            Clients.Group(roomId.ToString()).RevealVotes();
+            Clients.Group(roomId.ToString()).ShowSummary(GetModel(roomId).GetSummaryVote());
+        }
+
+        public void ForceReveal(int roomId)
+        {
+            BroadcastStatus(roomId);
             Clients.Group(roomId.ToString()).RevealVotes();
             Clients.Group(roomId.ToString()).ShowSummary(GetModel(roomId).GetSummaryVote());
         }
